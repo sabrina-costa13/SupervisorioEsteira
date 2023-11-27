@@ -1,0 +1,22 @@
+#:kivy 1.11.1
+
+<ModbusPopup>:
+    title:"Configuração Modbus"
+    size_hint_y: None
+    size_hint_x: 0.4
+    height: 200
+    BoxLayout:
+        id: layout 
+        orientation: "vertical"
+        GridLayout:
+            cols: 2
+            rows:2
+            Label:
+                text: "IP"
+                font_size: 14
+            TextInput:
+                id: txt_ip
+                text: "10.15.20.17"
+                font_size: 14
+                haligh: "center"
+                valign: "middle"
