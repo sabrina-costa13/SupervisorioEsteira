@@ -102,3 +102,6 @@ class MainWidget(BoxLayout):
         # atualizacao dos labels
         for key, value in self._tags.items():
             self.ids[key].text = str(self._meas['values'][key])
+
+    def stopRefresh(self):
+        self._updateWidgets = False
