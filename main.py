@@ -10,30 +10,190 @@ class MainApp(App):
         """Método que gera o aplicativo com base no widget principal."""
         self._widget = MainWidget(scan_time=1000, server_ip='10.15.20.17', server_port=10011,
         modbus_addrs={
-            'es.torque': {
-                'addr': 1420,
+            'es.status_pid':{
+                'addr':722,
+                'tipo':'4X',
+                'div':1 
+            },
+            'es.temp_carc':{
+                'addr':706,
                 'tipo':'FP',
-                'div':100.0,
+                'div':10
             },
-            'es.habilita': {
-                'addr':1330,
-                'tipo': '4X',
-                'div': 1
-            },
-            'es.indica_driver':{
-                'addr':  1216,      
-                'tipo': '4X',
+            'es.le_carga':{
+                'addr':710,
+                'tipo':'FP',
                 'div':1
             },
-            'es.tipo_motor': {
-                'addr':708,
+            'es.esteira':{
+                'addr':724,
+                'tipo':'FP',
+                'div':1
+            },
+            'es.frequencia':{
+                'addr':830,
+                'tipo':'4X',
+                'div':100
+            },
+            'es.corrente_r':{
+                'addr':840,
+                'tipo':'4X',
+                'div':100
+            },
+            'es.corrente_s':{
+                'addr':841,
+                'tipo':'4X',
+                'div':100
+            },
+            'es.corrente_t':{
+                'addr':842,
+                'tipo':'4X',
+                'div':100
+            },
+            'es.corrente_n':{
+                'addr':843,
+                'tipo':'4X',
+                'div':100
+            },
+            'es.corrente_media':{
+                'addr':845,
+                'tipo':'4X',
+                'div':100
+            },
+            'es.tensao_rs':{
+                'addr':847,
+                'tipo':'4X',
+                'div':10
+            },
+            'es.tensao_st':{
+                'addr':848,
+                'tipo':'4X',
+                'div':10
+            },
+            'es.tensao_tr':{
+                'addr':849,
+                'tipo':'4X',
+                'div':10
+            },
+            'es.ativa_r':{
+                'addr':852,
                 'tipo':'4X',
                 'div':1
             },
-            'es.temp_carc': {
-                'addr':706,
+            'es.ativa_s':{
+                'addr':853,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.ativa_t':{
+                'addr':854,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.ativa_total':{
+                'addr':855,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.fp_total':{
+                'addr':871,
+                'tipo':'4X',
+                'div':1000
+            },
+            'es.encoder':{
+                'addr':884,
                 'tipo':'FP',
-                'div': 10
+                'div':1
+            },
+            'es.indica_driver':{
+                'addr':1216,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.atv31':{
+                'addr':1312,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.atv31_velocidade':{
+                'addr':1313,
+                'tipo':'4X',
+                'div':10
+            },
+            'es.atv31_acc':{
+                'addr':1314,
+                'tipo':'4X',
+                'div':10
+            },
+            'es.atv31_dcc':{
+                'addr':1315,
+                'tipo':'4X',
+                'div':10
+            },
+            'es.ats48':{
+                'addr':1316,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.ats48_acc':{
+                'addr':1317,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.ats48_dcc':{
+                'addr':1318,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.tesys':{
+                'addr':1319,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.sel_driver':{
+                'addr':1324,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.sel_pid':{
+                'addr':1332,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.demanda_anterior':{
+                'addr':1204,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.demanda_atual':{
+                'addr':1205,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.demanda_media':{
+                'addr':1206,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.demanda_pico':{
+                'addr':1207,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.demanda_prevista':{
+                'addr':1208,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.habilita':{
+                'addr':1330,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.torque':{
+                'addr':1420,
+                'tipo':'4X',
+                'div':100
             }
         }
         )
