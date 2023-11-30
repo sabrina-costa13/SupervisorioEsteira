@@ -1,5 +1,75 @@
 from kivy.uix.boxlayout import BoxLayout    
+from popups import ModbusPopup,ScanPopup
+from pyModbusTCP.client import ModbusClient
+from kivy.core.window import Window
+from threading import Thread
+from time import sleep
+from datetime import datetime
 
 class MainWidget(BoxLayout):
     """Classe que representa o widget principal."""
-    pass
+    
+    _updateThread = None
+    _updateWidgets = True
+    _tags = {}    
+    
+    def __init__(self,**kwargs):
+        """Construtor do widget principal."""
+        
+        super().__init__()
+        self._scan_time = kwargs.get('scan_time')
+        self._serverIP=kwargs.get('server_ip')
+        self._serverPort=kwargs.get('server_port')
+        self._modbusPopup= ModbusPopup(self._serverIP,self._serverPort)
+        self._scanPopup = ScanPopup(self._scan_time)
+        self._modbusClient = ModbusClient(host=self._serverIP,port=self._serverPort)
+        
+        self._meas={}
+        self._meas['timestamp']= None
+        self._meas['values']={}
+
+
+    def startDataRead(self,ip,port):
+        """
+        Método utilizado para a configuração do IP e porta do servidor Modbus e 
+        inicialização da thread de leitura dos dados e atualização da interface gráfica
+        """
+        self._serverIp = ip
+        self._serverPort = port
+        self._modbusClient.host = self._serverIp
+        self._modbusClient.port = self._serverPort
+        try:
+            Window.set_system_cursor('wait')
+            self._modbusClient.open() 
+            Window.set_system_cursor('arrow')
+            if self._modbusClient.is_open(): #conectar ao servidor modbus
+                self._updateThread = Thread(target=self.updater) #se conectado, iniciar a thread de atualização
+                self._updateThread.start()
+                self.ids.img_con.source= 'imgs/conectado.png'
+                self._modbusPopup.dismiss()
+            else:
+                self._modbusPopup.setInfo('Falha na conexão com o servidor')
+        except Exception as e:
+            print("Erro:",e.args)
+            
+    def updater(self):
+        """
+        Método que invoca as rotinas de leitura de dados, 
+        atualização da interface e inserção dos dados no Banco de dados
+        """
+        try: #criando uma thread secundária
+            while self._updateWidgets: 
+                #Ler os dados Modbus
+                #Atualizar a interface gráfica
+                #Inserir os dados no banco de dados
+                sleep(self._scan_time/1000)
+        except Exception as e:
+            self._modbusClient.close()
+            print("Erro:",e.args)
+            
+    def readData(self):
+        """
+        Método que realiza a leitura dos dados por meio do protocolo Modbus
+        """
+        self._meas['timestamp']=datetime.now() 
+        

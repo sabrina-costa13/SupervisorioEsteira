@@ -20,3 +20,61 @@
                 font_size: 14
                 haligh: "center"
                 valign: "middle"
+            Label:
+                text: "Porta"
+                font_size: 14
+            TextInput:
+                id: txt_port
+                text: "10011"
+                font_size: 14
+                haligh: "center"
+                valign: "middle"
+        BoxLayout:
+            orientation: "horizontal"
+            Button:
+                size_hint_y: None
+                height: 40
+                text: "Conectar"
+                on_release:
+                    root.clearInfo()
+                    app.root.startDataRead(txt_ip.text, int(txt_port.text))
+            Button:
+                size_hint_y: None
+                height: 40
+                text: "Fechar"
+                on_release: root.dismiss()
+               
+
+<ScanPopup>:
+    title:"Configuração Scantime"
+    size_hint_y: None
+    size_hint_x: 0.4
+    height: 150
+    BoxLayout:
+        id: layout 
+        orientation: "vertical"
+        GridLayout:
+            cols: 2
+            rows:1
+            Label:
+                text: "Scantime [ms]"
+                font_size: 14
+            TextInput:
+                id: txt_st
+                font_size: 14
+                haligh: "center"
+                valign: "middle"
+        BoxLayout:
+            orientation: "horizontal"
+            Button:
+                size_hint_y: None
+                height: 40
+                text: "Configurar"
+                on_release:
+                    app.root._scan_time = int(txt_st.text)
+            Button:
+                size_hint_y: None
+                height: 40
+                text: "Fechar"
+                on_release: root.dismiss()
+               
