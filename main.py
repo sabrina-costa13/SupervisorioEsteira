@@ -8,8 +8,34 @@ class MainApp(App):
 
     def build(self):
         """Método que gera o aplicativo com base no widget principal."""
-        self._widget = MainWidget (scan_time=1000, server_ip='10.15.20.17', server_port=10011,
-       
+        self._widget = MainWidget(scan_time=1000, server_ip='10.15.20.17', server_port=10011,
+        modbus_addrs={
+            'es.torque': {
+                'addr': 1420,
+                'tipo':'FP',
+                'div':100.0,
+            },
+            'es.habilita': {
+                'addr':1330,
+                'tipo': '4X',
+                'div': 1
+            },
+            'es.indica_driver':{
+                'addr':  1216,      
+                'tipo': '4X',
+                'div':1
+            },
+            'es.tipo_motor': {
+                'addr':708,
+                'tipo':'4X',
+                'div':1
+            },
+            'es.temp_carc': {
+                'addr':706,
+                'tipo':'FP',
+                'div': 10
+            }
+        }
         )
 
         return self._widget

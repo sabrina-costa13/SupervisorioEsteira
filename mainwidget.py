@@ -5,11 +5,14 @@ from kivy.core.window import Window
 from threading import Thread
 from time import sleep
 from datetime import datetime
+import random
+from pymodbus import payload as pl
 
 class MainWidget(BoxLayout):
     """Classe que representa o widget principal."""
     
     _updateThread = None
+    _decoder = None
     _updateWidgets = True
     _tags = {}    
     
@@ -27,6 +30,13 @@ class MainWidget(BoxLayout):
         self._meas={}
         self._meas['timestamp']= None
         self._meas['values']={}
+        for key,value in kwargs.get('modbus_addrs').items():
+            if key== 'es.torque':
+                plot_color = (1,0,0,1)
+            else:
+                plot_color = (random.random(),random.random(),random.random(),1)
+            self._tags[key]={'addr':value['addr'],'tipo':value['tipo'],'div':value['div'],'color':plot_color}
+        
 
 
     def startDataRead(self,ip,port):
@@ -42,7 +52,7 @@ class MainWidget(BoxLayout):
             Window.set_system_cursor('wait')
             self._modbusClient.open() 
             Window.set_system_cursor('arrow')
-            if self._modbusClient.is_open(): #conectar ao servidor modbus
+            if self._modbusClient.is_open: #conectar ao servidor modbus
                 self._updateThread = Thread(target=self.updater) #se conectado, iniciar a thread de atualização
                 self._updateThread.start()
                 self.ids.img_con.source= 'imgs/conectado.png'
@@ -50,7 +60,7 @@ class MainWidget(BoxLayout):
             else:
                 self._modbusPopup.setInfo('Falha na conexão com o servidor')
         except Exception as e:
-            print("Erro:",e.args)
+            print("Erro start Data read:",e.args)
             
     def updater(self):
         """
@@ -59,13 +69,13 @@ class MainWidget(BoxLayout):
         """
         try: #criando uma thread secundária
             while self._updateWidgets: 
-                #Ler os dados Modbus
-                #Atualizar a interface gráfica
+                self.readData()
+                self.updateGUI()
                 #Inserir os dados no banco de dados
                 sleep(self._scan_time/1000)
         except Exception as e:
             self._modbusClient.close()
-            print("Erro:",e.args)
+            print("Erro updater:",e.args)
             
     def readData(self):
         """
@@ -73,3 +83,22 @@ class MainWidget(BoxLayout):
         """
         self._meas['timestamp']=datetime.now() 
         
+        for key,value in self._tags.items():
+            if value['tipo']=='4X': #Holding Register 16bits
+                self._meas['values'][key]=(self._modbusClient.read_holding_registers(value['addr'],1)[0])/value['div']      
+        
+            elif value['tipo']=='FP': #Floating Point
+                self._meas['values'][key]=(self.lerFloat(value['addr']))/value['div']
+        
+        
+    def lerFloat(self, addr):
+        self._decoder = pl.BinaryPayloadDecoder.fromRegisters(self._modbusClient.read_holding_registers(addr,2),byteorder=pl.Endian.Little)
+        return self._decoder.decode_32bit_float()
+    
+    def updateGUI(self):
+        """
+        Metodo para atualizar a interface grafica
+        """
+        # atualizacao dos labels
+        for key, value in self._tags.items():
+            self.ids[key].text = str(self._meas['values'][key])
