@@ -92,10 +92,28 @@ class MainWidget(BoxLayout):
                 self._meas['values'][key]=(self.lerFloat(value['addr']))/value['div']
                 print(value['div'])
         
+    def writeData(self,addr,tipo,div,value):
+        """
+        Método para a escrita de dados por meio do protocolo MODBUS
+        """
         
+        if tipo=='4X':
+            self._modbusClient.write_single_register(addr,int(value*div))
+        elif tipo=='FP':
+            print(self.escreveFloat(addr,float(value*div)))
+
     def lerFloat(self, addr):
         self._decoder = pl.BinaryPayloadDecoder.fromRegisters(self._modbusClient.read_holding_registers(addr,2),byteorder=pl.Endian.Big,wordorder=pl.Endian.Little)
         return self._decoder.decode_32bit_float()
+    
+    def escreveFloat(self, addr, value):
+        """
+        Método para escrever um dado float utilizando o protocolo MODBUS
+        """
+        builder = pl.BinaryPayloadBuilder(byteorder=pl.Endian.Big, wordorder=pl.Endian.Little)
+        builder.add_32bit_float(value)
+        payload = builder.to_registers()
+        return self._modbusClient.write_multiple_registers(addr,payload)
     
     def updateGUI(self):
         """
