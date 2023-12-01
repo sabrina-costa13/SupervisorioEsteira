@@ -88,11 +88,13 @@ class MainWidget(BoxLayout):
                 self._meas['values'][key]=(self._modbusClient.read_holding_registers(value['addr'],1)[0])/value['div']      
         
             elif value['tipo']=='FP': #Floating Point
+                
                 self._meas['values'][key]=(self.lerFloat(value['addr']))/value['div']
+                print(value['div'])
         
         
     def lerFloat(self, addr):
-        self._decoder = pl.BinaryPayloadDecoder.fromRegisters(self._modbusClient.read_holding_registers(addr,2),byteorder=pl.Endian.Little)
+        self._decoder = pl.BinaryPayloadDecoder.fromRegisters(self._modbusClient.read_holding_registers(addr,2),byteorder=pl.Endian.Big,wordorder=pl.Endian.Little)
         return self._decoder.decode_32bit_float()
     
     def updateGUI(self):
@@ -102,3 +104,6 @@ class MainWidget(BoxLayout):
         # atualizacao dos labels
         for key, value in self._tags.items():
             self.ids[key].text = str(self._meas['values'][key])
+            
+    def stopRefresh(self):
+        self._updateWidgets = False
