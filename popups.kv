@@ -42,7 +42,9 @@
                 size_hint_y: None
                 height: 40
                 text: "Fechar"
-                on_release: root.dismiss()
+                on_release:
+                    root.dismiss()
+                    root.clearInfo()
                
 
 <ScanPopup>:
@@ -77,4 +79,26 @@
                 height: 40
                 text: "Fechar"
                 on_release: root.dismiss()
+
+<DataGraphPopup>:
+    title: "Gráfico de velocidade da esteira"
+    BoxLayout:
+        orientation: 'vertical'
+        TimeSeriesGraph: 
+            id: graph
+            xlabel:'Horário'
+            ylabel: 'Velocidade [m/s]' 
+            background_color : 0.5,0.5,0.5,0.5
+            x_ticks_minor: 1
+            x_ticks_major: 5 
+            y_ticks_major: 100
+            y_grid_label: True
+            x_grid_label: True
+            padding: 5
+            x_grid: True
+            y_grid: True
+            xmin: 0
+            ymin: 0
+            ymax: 100 #lembrar de alterar de acordo coma velocidade max da esteira
+
                

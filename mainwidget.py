@@ -1,5 +1,5 @@
 from kivy.uix.boxlayout import BoxLayout    
-from popups import ModbusPopup,ScanPopup
+from popups import ModbusPopup,ScanPopup, DataGraphPopup
 from pyModbusTCP.client import ModbusClient
 from kivy.core.window import Window
 from threading import Thread
@@ -7,6 +7,7 @@ from time import sleep
 from datetime import datetime
 import random
 from pymodbus import payload as pl
+from timeseriesgraph import TimeSeriesGraph
 
 class MainWidget(BoxLayout):
     """Classe que representa o widget principal."""
@@ -14,7 +15,8 @@ class MainWidget(BoxLayout):
     _updateThread = None
     _decoder = None
     _updateWidgets = True
-    _tags = {}    
+    _tags = {}   
+    _max_points = 20
     
     def __init__(self,**kwargs):
         """Construtor do widget principal."""
@@ -31,12 +33,13 @@ class MainWidget(BoxLayout):
         self._meas['timestamp']= None
         self._meas['values']={}
         for key,value in kwargs.get('modbus_addrs').items():
+            print(f'key: {key}, value: {value}')
             if key== 'es.torque':
                 plot_color = (1,0,0,1)
             else:
                 plot_color = (random.random(),random.random(),random.random(),1)
             self._tags[key]={'addr':value['addr'],'tipo':value['tipo'],'div':value['div'],'color':plot_color}
-        
+        self._graph = DataGraphPopup(self._max_points, self._tags['es.esteira']['color']) #aqui também tem esteira para trocar
 
 
     def startDataRead(self,ip,port):
@@ -91,7 +94,7 @@ class MainWidget(BoxLayout):
                 
                 self._meas['values'][key]=(self.lerFloat(value['addr']))/value['div']
                 print(value['div'])
-        
+   
     def writeData(self,addr,tipo,div,value):
         """
         Método para a escrita de dados por meio do protocolo MODBUS
@@ -122,6 +125,8 @@ class MainWidget(BoxLayout):
         # atualizacao dos labels
         for key, value in self._tags.items():
             self.ids[key].text = str(self._meas['values'][key])
-
+            
+        #atualização do nível da velociade
+        self.ids.lb_velocidade.size = (self.ids.lb_velocidade.size[0][self._meas['values']['es.esteira']/100*self.ids.velocidade.size[1]])#provavelmente o dado esteira esta errado, conferir no teste
     def stopRefresh(self):
         self._updateWidgets = False
