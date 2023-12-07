@@ -2,7 +2,7 @@ from kivy.app import App
 from mainwidget import MainWidget
 from kivy.lang.builder import Builder
 
-# Comentario teste para commit/push
+# Comentario teste ppiara commit/push
 class MainApp(App):
     """
     Classe com o aplicativo
