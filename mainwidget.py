@@ -107,21 +107,21 @@ class MainWidget(BoxLayout):
             print(self.escreveFloat(addr,float(value*div)))
 
     def lerFloat(self, addr):
-        self._decoder = pl.BinaryPayloadDecoder.fromRegisters(self._modbusClient.read_holding_registers(addr,2),byteorder=pl.Endian.Big,wordorder=pl.Endian.Little)
+        self._decoder = pl.BinaryPayloadDecoder.fromRegisters(self._modbusClient.read_holding_registers(addr,2),byteorder=pl.Endian.BIG,wordorder=pl.Endian.LITTLE)
         return self._decoder.decode_32bit_float()
     
     def escreveFloat(self, addr, value):
         """
         Método para escrever um dado float utilizando o protocolo MODBUS
         """
-        builder = pl.BinaryPayloadBuilder(byteorder=pl.Endian.Big, wordorder=pl.Endian.Little)
+        builder = pl.BinaryPayloadBuilder(byteorder=pl.Endian.BIG, wordorder=pl.Endian.LITTLE)
         builder.add_32bit_float(value)
         payload = builder.to_registers()
         return self._modbusClient.write_multiple_registers(addr,payload)
     
     def updateGUI(self):
         """
-        Metodo para atualizar a interface grafica
+        Metodo para atualizar a interface grafica a partir dos dados lidos
         """
         # atualizacao dos labels
         for key, value in self._tags.items():
