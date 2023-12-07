@@ -199,10 +199,10 @@
                 on_text_validate: root.setSetPoint()
                 multiline: False
             Label:
-                text: "MV (%):"
+                text: "Variável Manipulada (%):"
                 font_size: 14
             TextInput:
-                id: defineMV
+                id: es.mv_escreve
                 text: ' '
                 font_size: 14
                 haligh: "center"
@@ -211,10 +211,10 @@
                 on_text_validate: root.setMV()
                 multiline: False
             Label:
-                text: "P:"
+                text: "Controle Proporcinal:"
                 font_size: 14
             TextInput:
-                id: defineP
+                id: es.p
                 font_size: 14
                 text: "8.0"
                 haligh: "center"
@@ -223,10 +223,10 @@
                 on_text_validate: root.setP()   
                 multiline: False
             Label:
-                text: "I:"
+                text: "Controle Integral:"
                 font_size: 14
             TextInput: 
-                id: defineI
+                id: es.i
                 font_size: 14
                 text: "5.0"
                 haligh: "center"
@@ -235,10 +235,10 @@
                 on_text_validate: root.setI()
                 multiline: False
             Label:
-                text: "D:"
+                text: "Controle Derivativo:"
                 font_size: 14
             TextInput:
-                id: defineD
+                id: es.d
                 font_size: 14
                 text: "2.0"
                 haligh: "center"

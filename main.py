@@ -194,6 +194,31 @@ class MainApp(App):
                 'tipo':'4X',
                 'div':1
             },
+            'es.carga':{
+                'addr':1302,
+                'tipo':'FP',
+                'div':1
+            },
+            'es.p':{
+                'addr':1304,
+                'tipo':'FP',
+                'div':1
+            },
+            'es.i':{
+                'addr':1306,
+                'tipo':'FP',
+                'div':1
+            },
+            'es.d':{
+                'addr':1308,
+                'tipo':'FP',
+                'div':1
+            },
+            'es.mv_escreve':{
+                'addr':1310,
+                'tipo':'FP',
+                'div':1
+            },
             'es.torque':{
                 'addr':1420,
                 'tipo':'4X',
@@ -201,7 +226,6 @@ class MainApp(App):
             }
         }
         )
-
 
         return self._widget
     

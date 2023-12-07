@@ -1,5 +1,5 @@
 from kivy.uix.boxlayout import BoxLayout    
-from popups import ModbusPopup,ScanPopup, DataGraphPopup
+from popups import ModbusPopup,ScanPopup, DataGraphPopup, PidPopup
 from pyModbusTCP.client import ModbusClient
 from kivy.core.window import Window
 from threading import Thread
@@ -28,6 +28,7 @@ class MainWidget(BoxLayout):
         self._serverPort=kwargs.get('server_port')
         self._modbusPopup= ModbusPopup(self._serverIP,self._serverPort)
         self._scanPopup = ScanPopup(self._scan_time)
+        self._pidPopup = PidPopup()
         self._modbusClient = ModbusClient(host=self._serverIP,port=self._serverPort)
         
         self._meas={}
@@ -123,16 +124,16 @@ class MainWidget(BoxLayout):
         """
         Metodo para atualizar a interface grafica a partir dos dados lidos
         """
-        # atualizacao dos labels
-        for key, value in self._tags.items():
-            self.ids[key].text = str(self._meas['values'][key])
-            
         #atualização do nível da velociade
         self.ids.lb_velocidade.size = (self.ids.lb_velocidade.size[0][self._meas['values']['es.esteira']/100*self.ids.velocidade.size[1]])#provavelmente o dado esteira esta errado, conferir no teste
         
         #atualização do gráfico
-        self._graph.ids.graph.updateGraph((self._meas['timestamp'],self._meas['values']['fornalha']),0)
-        
+        self._graph.ids.graph.updateGraph((self._meas['timestamp'],self._meas['values']['es.esteira']),0)
+
+        # atualizacao dos labels
+        for key, value in self._tags.items():
+            self.ids[key].text = str(self._meas['values'][key])
+            
         
     def stopRefresh(self):
         self._updateWidgets = False

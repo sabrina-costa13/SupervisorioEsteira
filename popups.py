@@ -51,7 +51,9 @@ class HistGraphPopup(Popup):
         super().__init__()
         for key,value in kwargs.get('tags').itens():
             cb = LabeledCheckBoxHistGraph()
-            
+
+class PidPopup(Popup):
+    pass
             
 class LabeledCheckBoxHistGraph(BoxLayout):
     pass
