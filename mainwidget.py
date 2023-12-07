@@ -107,14 +107,14 @@ class MainWidget(BoxLayout):
             print(self.escreveFloat(addr,float(value*div)))
 
     def lerFloat(self, addr):
-        self._decoder = pl.BinaryPayloadDecoder.fromRegisters(self._modbusClient.read_holding_registers(addr,2),byteorder=pl.Endian.Big,wordorder=pl.Endian.Little)
+        self._decoder = pl.BinaryPayloadDecoder.fromRegisters(self._modbusClient.read_holding_registers(addr,2),byteorder=pl.Endian.BIG,wordorder=pl.Endian.LITTLE)
         return self._decoder.decode_32bit_float()
     
     def escreveFloat(self, addr, value):
         """
         Método para escrever um dado float utilizando o protocolo MODBUS
         """
-        builder = pl.BinaryPayloadBuilder(byteorder=pl.Endian.Big, wordorder=pl.Endian.Little)
+        builder = pl.BinaryPayloadBuilder(byteorder=pl.Endian.BIG, wordorder=pl.Endian.LITTLE)
         builder.add_32bit_float(value)
         payload = builder.to_registers()
         return self._modbusClient.write_multiple_registers(addr,payload)
@@ -123,16 +123,16 @@ class MainWidget(BoxLayout):
         """
         Metodo para atualizar a interface grafica
         """
-        # atualizacao dos labels
-        for key, value in self._tags.items():
-            self.ids[key].text = str(self._meas['values'][key])
-            
         #atualização do nível da velociade
         self.ids.lb_velocidade.size = (self.ids.lb_velocidade.size[0][self._meas['values']['es.esteira']/100*self.ids.velocidade.size[1]])#provavelmente o dado esteira esta errado, conferir no teste
         
         #atualização do gráfico
-        self._graph.ids.graph.updateGraph((self._meas['timestamp'],self._meas['values']['fornalha']),0)
-        
+        self._graph.ids.graph.updateGraph((self._meas['timestamp'],self._meas['values']['es.esteira']),0)
+
+        # atualizacao dos labels
+        for key, value in self._tags.items():
+            self.ids[key].text = str(self._meas['values'][key])
+            
         
     def stopRefresh(self):
         self._updateWidgets = False
