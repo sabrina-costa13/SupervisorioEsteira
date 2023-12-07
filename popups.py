@@ -45,3 +45,13 @@ class DataGraphPopup(Popup): #gráfico
         
 class LabeledCheckBoxDataGraph(BoxLayout):
     pass
+
+class HistGraphPopup(Popup):
+    def __init__(self,**kwargs):
+        super().__init__()
+        for key,value in kwargs.get('tags').itens():
+            cb = LabeledCheckBoxHistGraph()
+            
+            
+class LabeledCheckBoxHistGraph(BoxLayout):
+    pass
