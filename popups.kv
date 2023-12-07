@@ -130,6 +130,122 @@
                 text: "Fechar"
                 size_hint: (0.2,1)
                 on_release: root.dismiss()
+<PidPopup>:
+    title:"Configuração e dados do PID"
+    size_hint_y: None
+    size_hint_x: 0.8
+    height: 600
+    BoxLayout:
+        orientation: "vertical"
+        GridLayout:
+            cols: 2
+            rows: 5
+            Label: 
+                text: "Status PID"
+                font_size: 14
+            Label:
+                id: es.status_pid
+                text: '-.- Kgf/cm²'
+                font_size: 14
+                haligh: "center"
+                valign: "middle"
+            
+            Label:
+                text: 'Tipo de PID'
+                font_size: 14
+            Label:
+                id: es.sel_pid
+                font_size: 14
+                haligh: "center"
+                valign: "middle"
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                text: " "
+                font_size: 14
+            GridLayout:
+                cols: 2
+                rows:2
+                CheckBox:
+                    id: AutomaticoOn
+                    text: "Automático"
+                    size: 50, 10
+                    group: "Aut/Man"
+                    active: False
+                Label:
+                    text:"Automático"
+                CheckBox:
+                    id: ManualOn
+                    text: "Manual"
+                    size: 50, 10
+                    group: "Aut/Man"
+                    
+                    active: True
+                Label:
+                    text:"Manual"
+        GridLayout:
+            cols: 2
+            rows:5
+            Label:
+                text: "Defina o Setpoint(SP):"
+                font_size: 14
+            TextInput:
+                id: es.carga 
+                font_size: 14
+                text: ' '
+                haligh: "center"
+                valign: "middle"
+                padding: 8,8,8,8
+                on_text_validate: root.setSetPoint()
+                multiline: False
+            Label:
+                text: "Variável Manipulada (%):"
+                font_size: 14
+            TextInput:
+                id: es.mv_escreve
+                text: ' '
+                font_size: 14
+                haligh: "center"
+                valign: "middle"
+                padding: 8,8,8,8
+                on_text_validate: root.setMV()
+                multiline: False
+            Label:
+                text: "Controle Proporcinal:"
+                font_size: 14
+            TextInput:
+                id: es.p
+                font_size: 14
+                text: "8.0"
+                haligh: "center"
+                valign: "middle"
+                padding: 8,8,8,8
+                on_text_validate: root.setP()   
+                multiline: False
+            Label:
+                text: "Controle Integral:"
+                font_size: 14
+            TextInput: 
+                id: es.i
+                font_size: 14
+                text: "5.0"
+                haligh: "center"
+                valign: "middle"
+                padding: 8,8,8,8
+                on_text_validate: root.setI()
+                multiline: False
+            Label:
+                text: "Controle Derivativo:"
+                font_size: 14
+            TextInput:
+                id: es.d
+                font_size: 14
+                text: "2.0"
+                haligh: "center"
+                valign: "middle"
+                padding: 8,8,8,8
+                on_text_validate: root.setD()
+                multiline: False
 
 <LabeledCheckBoxDataGraph>:
     orientation: 'horizontal'
