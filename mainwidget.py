@@ -125,7 +125,7 @@ class MainWidget(BoxLayout):
         Metodo para atualizar a interface grafica a partir dos dados lidos
         """
         #atualização do nível da velociade
-        self.ids.lb_velocidade.size = (self.ids.lb_velocidade.size[0][self._meas['values']['es.esteira']/100*self.ids.velocidade.size[1]])#provavelmente o dado esteira esta errado, conferir no teste
+        self.ids.lb_velocidade.size[1] = (self._meas['values']['es.esteira']/100*self.ids.velocidade.size[1])#provavelmente o dado esteira esta errado, conferir no teste
         
         #atualização do gráfico
         self._graph.ids.graph.updateGraph((self._meas['timestamp'],self._meas['values']['es.esteira']),0)
