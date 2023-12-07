@@ -2,6 +2,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy_garden.graph import LinePlot
 from timeseriesgraph import TimeSeriesGraph
+from kivy.uix.boxlayout import BoxLayout
 
 class ModbusPopup(Popup):
     """Classe que gera o popup de configuração do Modbus"""
@@ -41,3 +42,6 @@ class DataGraphPopup(Popup): #gráfico
         self.plot = LinePlot(line_width=1.5, color=plot_color)
         self.ids.graph.add_plot(self.plot)
         self.ids.graph.xmax = xmax
+        
+class LabeledCheckBoxDataGraph(BoxLayout):
+    pass
