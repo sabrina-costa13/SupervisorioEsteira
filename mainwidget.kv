@@ -1,5 +1,5 @@
 #:kivy 1.11.1
-
+#barra superior
 <MainWidget>:
     orientation: 'vertical'
     canvas:
@@ -10,9 +10,9 @@
     BoxLayout:
         orientation:'horizontal'
         size_hint:(1,0.1)
-        spacing: 10
+        spacing: 100
         Label:
-            text: 'Supervisório Esteira'
+            text: 'SUPERVISÓRIO ESTEIRA'
             size_hint_x: None
             width: 300
         BoxLayout:
@@ -29,19 +29,64 @@
                 Button:
                     text: 'Scan Time'
                     on_release: root._scanPopup.open()
-
         Image:
             id: img_con
             size_hint_x: None
             width: 80
             source: 'imgs/desconectado.png'
-            pos_hint: {'top':1, 'rigth':1}
+            pos_hint: {'top':1, 'rigth':1}     
+#inserindo a planta
     FloatLayout:
         canvas:
             Color:
                 rgb: 1,1,1 
             Rectangle:
                 size: self.size
+        Image:
+            source: 'imgs/esteira.jpg'
+        Label:
+            id: lb_velocidade
+            size_hint: (None,None)
+            size: (velocidade.size[0],velocidade.size[1])
+            pos_hint: {'x':0.693,'y':0.40}
+            canvas:
+                Color: 
+                    rgb: 1,0,0
+                Rectangle:
+                    size: self.size
+                    pos: (self.pos[0]+self.width*1.5,self.pos[1])
+        Button: #botoes de Configuração
+            text :'PID'
+            pos_hint:{'x':0.35, 'y':0.05}
+            size_hint:(0.2,0.075)
+            padding: 10,10
+            on_release:root._pidPopup.open()
+        Button:
+            text: 'Motor'
+            pos_hint:{'x':0.55, 'y':0.05}
+            size_hint:(0.2,0.075)
+            padding: 10,10
+            on_release:root._medicoesPopup.open()
+        Button:
+            text: 'Dados Históricos'
+            pos_hint:{'x':0.75, 'y':0.05}
+            size_hint:(0.2,0.075)
+            padding: 10,10
+            on_release:root._hgraph.open()
+        
+        Image:
+            id: velocidade
+            source: 'imgs/regua.png'
+            size_hint: 0.5,0.5
+            pos_hint: lb_velocidade.pos_hint
+        Button:
+            size_hint: (0.07, 0.07)
+            background_normal: 'imgs/graph_icon.png'
+            background_down: 'imgs/graph_icon.png'
+            pos_hint: {'x':0.783,'y':0.33}
+            on_release:
+                root._graph.open()
+
         Label: 
             id: es.habilita
             text: '-.- '

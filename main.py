@@ -2,7 +2,7 @@ from kivy.app import App
 from mainwidget import MainWidget
 from kivy.lang.builder import Builder
 
-# Comentario teste para commit/push
+# Comentario teste ppiara commit/push
 class MainApp(App):
     """
     Classe com o aplicativo
@@ -192,6 +192,31 @@ class MainApp(App):
             'es.habilita':{
                 'addr':1330,
                 'tipo':'4X',
+                'div':1
+            },
+            'es.carga':{
+                'addr':1302,
+                'tipo':'FP',
+                'div':1
+            },
+            'es.p':{
+                'addr':1304,
+                'tipo':'FP',
+                'div':1
+            },
+            'es.i':{
+                'addr':1306,
+                'tipo':'FP',
+                'div':1
+            },
+            'es.d':{
+                'addr':1308,
+                'tipo':'FP',
+                'div':1
+            },
+            'es.mv_escreve':{
+                'addr':1310,
+                'tipo':'FP',
                 'div':1
             },
             'es.torque':{

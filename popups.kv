@@ -42,9 +42,10 @@
                 size_hint_y: None
                 height: 40
                 text: "Fechar"
-                on_release: root.dismiss()
+                on_release:
+                    root.dismiss()
+                    root.clearInfo()
                
-
 <ScanPopup>:
     title:"Configuração Scantime"
     size_hint_y: None
@@ -64,6 +65,7 @@
                 font_size: 14
                 haligh: "center"
                 valign: "middle"
+                padding: 10,10,10,10
         BoxLayout:
             orientation: "horizontal"
             Button:
@@ -77,4 +79,181 @@
                 height: 40
                 text: "Fechar"
                 on_release: root.dismiss()
+
+<DataGraphPopup>:
+    title: "Gráfico de velocidade da esteira"
+    BoxLayout:
+        orientation: 'vertical'
+        TimeSeriesGraph: 
+            id: graph
+            xlabel:'Horário'
+            ylabel: 'Velocidade [m/s]' 
+            background_color : 0.5,0.5,0.5,0.5
+            x_ticks_minor: 1
+            x_ticks_major: 5 
+            y_ticks_major: 100
+            y_grid_label: True
+            x_grid_label: True
+            padding: 5
+            x_grid: True
+            y_grid: True
+            xmin: 0
+            ymin: 0
+            ymax: 100 #lembrar de alterar de acordo coma velocidade max da esteira
+#Criando menus de interação
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: (1,0.05)
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: (0.5,1)
+            Label:
+                size_hint: (0.3,1)
+                text: "Número de pontos do gráfico"
+            LabeledCheckBoxDataGraph: # menu de seleção do numero de pontos
+                id: np20
+                on_kv_post:
+                    self.ids.label.text = '20'
+                    self.ids.CheckBox.group = 'cb_group'
+                    self.ids.CheckBox.active = True
+            LabeledCheckBoxDataGraph:
+                id: np50
+                on_kv_post:
+                    self.ids.label.text = '50'
+                    self.ids.CheckBox.group = 'cb_group'
+            LabeledCheckBoxDataGraph:
+                id: np100
+                on_kv_post:
+                    self.ids.label.text = '100'
+                    self.ids.CheckBox.group = 'cb_group'
+            Button:
+                text: "Fechar"
+                size_hint: (0.2,1)
+                on_release: root.dismiss()
+<PidPopup>:
+    title:"Configuração e dados do PID"
+    size_hint_y: None
+    size_hint_x: 0.8
+    height: 600
+    BoxLayout:
+        orientation: "vertical"
+        GridLayout:
+            cols: 2
+            rows: 5
+            Label: 
+                text: "Status PID"
+                font_size: 14
+            Label:
+                id: es.status_pid
+                text: ''
+                font_size: 14
+                haligh: "center"
+                valign: "middle"
+            
+            Label:
+                text: 'Tipo de PID'
+                font_size: 14
+            Label:
+                id: es.sel_pid
+                font_size: 14
+                haligh: "center"
+                valign: "middle"
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                text: " "
+                font_size: 14
+            GridLayout:
+                cols: 2
+                rows:2
+                CheckBox:
+                    id: AutomaticoOn
+                    text: "Automático"
+                    size: 50, 10
+                    group: "Aut/Man"
+                    active: False
+                Label:
+                    text:"Automático"
+                CheckBox:
+                    id: ManualOn
+                    text: "Manual"
+                    size: 50, 10
+                    group: "Aut/Man"
+                    
+                    active: True
+                Label:
+                    text:"Manual"
+        GridLayout:
+            cols: 2
+            rows:5
+            Label:
+                text: "Defina o Setpoint(SP):"
+                font_size: 14
+            TextInput:
+                id: es.carga 
+                font_size: 14
+                text: ' '
+                haligh: "center"
+                valign: "middle"
+                padding: 8,8,8,8
+                on_text_validate: root.setSetPoint()
+                multiline: False
+            Label:
+                text: "Variável Manipulada (%):"
+                font_size: 14
+            TextInput:
+                id: es.mv_escreve
+                text: ' '
+                font_size: 14
+                haligh: "center"
+                valign: "middle"
+                padding: 8,8,8,8
+                on_text_validate: root.setMV()
+                multiline: False
+            Label:
+                text: "Controle Proporcinal:"
+                font_size: 14
+            TextInput:
+                id: es.p
+                font_size: 14
+                text: "8.0"
+                haligh: "center"
+                valign: "middle"
+                padding: 8,8,8,8
+                on_text_validate: root.setP()   
+                multiline: False
+            Label:
+                text: "Controle Integral:"
+                font_size: 14
+            TextInput: 
+                id: es.i
+                font_size: 14
+                text: "5.0"
+                haligh: "center"
+                valign: "middle"
+                padding: 8,8,8,8
+                on_text_validate: root.setI()
+                multiline: False
+            Label:
+                text: "Controle Derivativo:"
+                font_size: 14
+            TextInput:
+                id: es.d
+                font_size: 14
+                text: "2.0"
+                haligh: "center"
+                valign: "middle"
+                padding: 8,8,8,8
+                on_text_validate: root.setD()
+                multiline: False
+
+<LabeledCheckBoxDataGraph>:
+    orientation: 'horizontal'
+    size_hint: (0.1,1)
+    CheckBox:
+        id: CheckBox
+        on_active: app.root._graph.ids.graph.setMaxPoints(int (label.text),0) if app.root is not None else None
+    Label:
+        id: label
+
                
