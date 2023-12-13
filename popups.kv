@@ -585,4 +585,88 @@
     Label:
         id: label
 
+<SelectDataGraphPopup>:
+    title: " Escolha do dado"
+    size_hint_y: 1
+    size_hint_x: 0.8
+    BoxLayout:
+        orientation: "horizontal"
+        BoxLayout:
+            orientation: "vertical"
+            CheckBox:
+                id: checktempCarc
+                group: "select_group"
+                on_active: app.root._selection='es.temp_carc' if app.root is not None else None
+            CheckBox:
+                id: checkvelEsteira
+                group: "select_group"
+                on_active: app.root._selection='es.esteira' if app.root is not None else None
+            CheckBox:
+                id: checkcargaPV
+    
+                group: "select_group"
+                on_active: app.root._selection='es.le_carga' if app.root is not None else None
+            CheckBox:
+                id: checktensaoRS
+                group: "select_group"
+                on_active: app.root._selection='es.tensao_rs' if app.root is not None else None
+            CheckBox:
+                id: checkfrequencia
+                group: "select_group"
+                on_active: app.root._selection='es.frequencia' if app.root is not None else None
+            CheckBox:
+                id: checkcorrenteMedia
+                
+                group: "select_group"
+                on_active: app.root._selection='es.corrente_media' if app.root is not None else None
+            CheckBox:
+                id: checkpotAtiva
+ 
+                group: "select_group"
+                active: True
+                on_active: app.root._selection='es.ativa_total' if app.root is not None else None
+            CheckBox:
+                id: checkfpTotal
+       
+                group: "select_group"
+                on_active: app.root._selection='es.fp_total' if app.root is not None else None
+            CheckBox:
+                id: checkTorque
+             
+                group: "select_group"
+                on_active: app.root._selection='es.torque' if app.root is not None else None
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                text: "Temperatura na carcaça (ºC)"
+            Label:
+                text: "Velocidade da esteira (m/min)"
+            Label:
+                text: "Carga do motor (Kgf/m²)"
+            Label:
+                text: "Tensão R-S (V)"
+            Label:
+                text: "Frequência da rede (Hz)"
+            Label:
+                text: "Corrente Média (A)"
+            Label:
+                text: "Potência ativa total (W)"
+            Label:
+                text: "Fator de potência total"
+            Label:
+                text: "Torque (N.m)"
+
+<LabeledCheckBoxHistGraph>:
+    orientation: "horizontal"
+    size_hint: (0.05,1)
+    BoxLayout:
+        orientation: "vertical"
+        CheckBox:
+            id: checkbox
+            group: "bd_group"
+            on_active: app.root.getDataDB()
+        Label:
+            id: label
+            font_size: 10
+            bold: True
                

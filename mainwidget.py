@@ -12,11 +12,12 @@ from kivy.uix.boxlayout import BoxLayout
 from db import Base,Session,engine
 from models import DadosEsteira
 from kivy_garden.graph import LinePlot
+from threading import Lock
 
 class MainWidget(BoxLayout):
     """Classe que representa o widget principal."""
     
-    _tags={'modbusaddrs':{},'atuadores':{}}
+    _tags={'modbus_addrs':{}}
     _updateThread = None
     #_decoder = None
     _updateWidgets = True
@@ -38,29 +39,29 @@ class MainWidget(BoxLayout):
         self._vareltPopup = VarEltPopup()
         self._selection='es.tensao_st'
         self._selectData= SelectDataGraphPopup()
+        self._tags['modbus_addrs'] = kwargs.get('modbus_addrs')
         
-        
-        self._hgraph= HistGraphPopup(tags=self._tags['modbusaddrs'])
+        self._hgraph= HistGraphPopup(tags=self._tags)
         
         self._meas={}
         self._meas['timestamp']= None
         self._meas['values']={}
         
-        for key,value in kwargs.get('modbus_addrs').items():
+        #self._session=Session()   
+        #Base.metadata.create_all(engine)  #
+        #self._lock=Lock()   #
+        
+        for key,value in self._tags['modbus_addrs'].items():
             print(f'key: {key}, value: {value}')
             if key== 'es.torque':
                 plot_color = (1,0,0,1)
             else:
                 plot_color = (random.random(),random.random(),random.random(),1)
-            self._tags['modbusaddrs'][key]={'addr':value['addr'],'color':plot_color,'tipo':value['tipo'],'div':value['div']}
-            
-        for key,value in kwargs.get('atuadores').items():
-            self._tags['atuadores'][key]={'addr':value['addr'],'tipo':value['tipo'],'div':value['div']}
+            self._tags['modbus_addrs'][key]={'addr':value['addr'],'color':plot_color,'tipo':value['tipo'],'div':value['div'],'atuador':value['atuador']}
 
-        for key,value in self._tags['modbusaddrs'].items():
+        for key,value in self._tags['modbus_addrs'].items():
             if self._selection == key:
-                self._graph=DataGraphPopup(self._max_points,self._tags['modbusaddrs'][key]['color'])
-
+                self._graph=DataGraphPopup(self._max_points,self._tags['modbus_addrs'][key]['color'])
 
 
     def startDataRead(self,ip,port):
@@ -107,7 +108,7 @@ class MainWidget(BoxLayout):
         """
         try:
             self._dados['timestamp']=self._meas['timestamp']
-            for key in self._tags['modbusaddrs']:
+            for key in self._tags['modbus_addrs']:
                 self._dados[key]=self._meas['values'][key]
             dado=DadosEsteira(**self._dados)
             self._lock.acquire()
@@ -153,9 +154,9 @@ class MainWidget(BoxLayout):
                             p= LinePlot(line_width=1)
                             p.points = [(x, results[x][key]) for x in range(0,len(results))]
                             self._hgraph.ids.graph.add_plot(p)
-                            self._hgraph.ids.graph.ymax=self._tags['modbusaddrs'][s]['escalamax']
-                            self._hgraph.ids.graph.y_ticks_major=self._tags['modbusaddrs'][s]['escalamax']/5
-                            self._hgraph.ids.graph.ylabel= self._tags['modbusaddrs'][s]['legenda']
+                            self._hgraph.ids.graph.ymax=self._tags['modbus_addrs'][s]['escalamax']
+                            self._hgraph.ids.graph.y_ticks_major=self._tags['modbus_addrs'][s]['escalamax']/5
+                            self._hgraph.ids.graph.ylabel= self._tags['modbus_addrs'][s]['legenda']
             self._hgraph.ids.graph.xmax=len(results)
             self._hgraph.ids.update_x_labels(tempo)
             
@@ -170,15 +171,14 @@ class MainWidget(BoxLayout):
         """
         self._meas['timestamp']=datetime.now() 
         
-        for key,value in self._tags.items():
-            if value['tipo']=='4X': #Holding Register 16bits
-                self._meas['values'][key]=(self._modbusClient.read_holding_registers(value['addr'],1)[0])/value['div']      
-        
-            elif value['tipo']=='FP': #Floating Point
-                
-                self._meas['values'][key]=(self.lerFloat(value['addr']))/value['div']
-                print(value['div'])
-   
+        for key,value in self._tags['modbus_addrs'].items():
+            if value['atuador']==0:
+                if value['tipo']=='4X': #Holding Register 16bits
+                    self._meas['values'][key]=(self._modbusClient.read_holding_registers(value['addr'],1)[0])/value['div']      
+                elif value['tipo']=='FP': #Floating Point
+                    self._meas['values'][key]=(self.lerFloat(value['addr']))/value['div']
+                    print(value['div'])
+
     def writeData(self,addr,tipo,div,value):
         """
         Método para a escrita de dados por meio do protocolo MODBUS
@@ -206,47 +206,45 @@ class MainWidget(BoxLayout):
         """
         Metodo para atualizar a interface grafica a partir dos dados lidos
         """
-        #atualização do nível da velociade
-        #self.ids.lb_velocidade.size[1] = (self._meas['values']['es.esteira']/100*self.ids.velocidade.size[1])#provavelmente o dado esteira esta errado, conferir no teste
+        # atualização do nível da velociade
+        self.ids.lb_velocidade.size[1] = (self._meas['values']['es.esteira']/100*self.ids.velocidade.size[1])#provavelmente o dado esteira esta errado, conferir no teste
         
-        #atualização do gráfico
-        #self._graph.ids.graph.updateGraph((self._meas['timestamp'],self._meas['values']['es.esteira']),0)
-
-        # atualizacao dos labels
-        #for key, value in self._tags.items():
-            #self.ids[key].text = str(self._meas['values'][key])
-            
+        # atualização do gráfico
+        self._graph.ids.graph.updateGraph((self._meas['timestamp'],self._meas['values']['es.esteira']),0)
+        # atualização dos labels da pagina principal
         self.ids['es.esteira'].text=str(round(self._meas['values']['es.esteira'],2))+' m/min'
         self.ids['es.le_carga'].text=str(round(self._meas['values']['es.le_carga'],2))+' kgf/cm²'
+        
         #self.ids['freqRotacao'].text=str(self._meas['values']['freqRotacao'])+' RPM'
-        partida=self._meas['values']['indicaPartida']
-        if partida==3:
-            self.ids['indicaPartida'].text='Direta'
-        elif partida==1:
-            self.ids['indicaPartida'].text='Soft-Start'
-        elif partida==2:
-            self.ids['indicaPartida'].text='Inversor'
-        self.ids['es.torque'].text=str(self._meas['values']['torque'])+' N.m' #conferir a tag
-        tipoMotor=self._meas['values']['es.tipo_motor']
-        if tipoMotor==1:
-            self.ids['btnComando'].background_color=(0,1,0,1)
-        elif tipoMotor==2:
-            self.ids['btnComando'].background_color=(0,0,1,1)
+        
+        # partida=self._meas['values']['indicaPartida']
+        # if partida==3:
+        #     self.ids['indicaPartida'].text='Direta'
+        # elif partida==1:
+        #     self.ids['indicaPartida'].text='Soft-Start'
+        # elif partida==2:
+        #     self.ids['indicaPartida'].text='Inversor'
+
+        # tipoMotor=self._meas['values']['es.tipo_motor']
+        # if tipoMotor==1:
+        #     self.ids['btnComando'].background_color=(0,1,0,1)
+        # elif tipoMotor==2:
+        #     self.ids['btnComando'].background_color=(0,0,1,1)
         self._pidPopup.update(self._meas)
         self._vareltPopup.update(self._meas) #conferir o endereço passado vareltPopup
         self._motorPopup.update(self._meas)
 
-        #self.updateAtuadores()
         self.updateGraph() 
+
 
     def updateGraph(self):
         '''
         Método para a atualização do gráfico
         '''
         self._graph.ids.graph.updateGraph((self._meas['timestamp'],self._meas['values'][self._selection]),0)
-        self._graph.ids.graph.ylabel= self._tags['modbusaddrs'][self._selection]['legenda']
-        self._graph.ids.graph.ymax=self._tags['modbusaddrs'][self._selection]['escalamax']
-        self._graph.ids.graph.y_ticks_major=self._tags['modbusaddrs'][self._selection]['escalamax']/5            
+        # self._graph.ids.graph.ylabel= str(self._tags['modbus_addrs'])
+        # self._graph.ids.graph.ymax=self._tags['modbus_addrs']
+        # self._graph.ids.graph.y_ticks_major=self._tags['modbus_addrs']           
         
     def stopRefresh(self):
         self._updateWidgets = False

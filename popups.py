@@ -44,9 +44,8 @@ class DataGraphPopup(Popup): #gráfico
         self.ids.graph.xmax = xmax
 class HistGraphPopup(Popup):
     def __init__(self,**kwargs):
-        super().__init__(**kwargs)
+        super().__init__()
         for key,value in kwargs.get('tags').items():
-            print(f'teste: {key}')
             cb = LabeledCheckBoxHistGraph()
             cb.ids.label.text = key
             cb.id= key
@@ -75,12 +74,12 @@ class PidPopup(Popup):
         """
         Método utilizado para atualizar os valores do PID
         """
-        self.ids.es.le_carga.text = str(medida['values']['es.le_carga'])
-        statusPID=medida['values']['es.status_pid']
+        self.ids['es.le_carga'].text = str(medida['values']['es.le_carga'])
+        statusPID=int(medida['values']['es.status_pid'])
         if statusPID == 0:
-            self.ids.statusPID.text = 'Automático'
+            self.ids['es.status_pid'].text = 'Automático'
         elif statusPID == 1:
-            self.ids.statusPID.text = 'Manual'
+            self.ids['es.status_pid'].text = 'Manual'
         #Atuadores
         AutomaticoPid=self.ids.AutomaticoOn.active
         if AutomaticoPid:
@@ -93,15 +92,15 @@ class PidPopup(Popup):
         medida['values']['es.i']=self._I
         medida['values']['es.d']=self._D
     def setSetPoint(self):
-        self._SP= float(self.ids.es.carga.text) 
+        self._SP= float(self.ids['es.carga'].text) 
     def setMV(self):
-        self._MV= float(self.ids.es.mv_escreve.text)
+        self._MV= float(self.ids['es.mv_escreve'].text)
     def setP(self):
-        self._P= float(self.ids.es.p.text)
+        self._P= float(self.ids['es.p'].text)
     def setI(self):
-        self._I= float(self.ids.es.i.text)
+        self._I= float(self.ids['es.i'].text)
     def setD(self):
-        self._D= float(self.ids.es.d.text)
+        self._D= float(self.ids['es.d'].text)
 
 class MotorPopup(Popup):
     """
@@ -152,6 +151,19 @@ class MotorPopup(Popup):
                 medida['values']['es.atv31_dcc']=self._desaceleracao
                 medida['values']['es.atv31_velocidade']=self._velInversor
                 medida['values']['es.sel_driver']=2
+                
+    def setPartida(self,partida):
+        self._partida=partida
+    def setOperacao(self,operacao):
+        self._operacao=operacao
+    def setAcc(self):
+        self._aceleracao=float(self.ids["es.atv31_acc"].text)
+    def setDcc(self):
+        self._desaceleracao=float(self.ids["es.atv31_dcc"].text)
+    def setVelInversor(self):
+        self._velInversor=int(self.ids["es.atv31_velocidade"].text)
+    def setVelInversorSlider(self,vel):
+        self._velInversor=vel
 
 class VarEltPopup(Popup):
     """
@@ -174,27 +186,7 @@ class VarEltPopup(Popup):
         self.ids["es.tensao_st"].text = str(medida['values']['es.tensao_st'])   
         self.ids["es.tensao_tr"].text = str(medida['values']['es.tensao_tr']) 
 
-    def setPartida(self,partida):
-        self._partida=partida
-    def setOperacao(self,operacao):
-        self._operacao=operacao
-    def setAcc(self):
-        self._aceleracao=float(self.ids["es.atv31_acc"].text)
-    def setDcc(self):
-        self._desaceleracao=float(self.ids["es.atv31_dcc"].text)
-    def setVelInversor(self):
-        self._velInversor=int(self.ids["es.atv31_velocidade"].text)
-    def setVelInversorSlider(self,vel):
-        self._velInversor=vel
 
-class HistGraphPopup(Popup):
-    def __init__(self,**kwargs):
-        super().__init__()
-        for key,value in kwargs.get('tags').items():
-            cb = LabeledCheckBoxHistGraph()
-            cb.ids.label.text = key
-            cb.id= key
-            self.ids.sensores.add_widget(cb)
             
 class LabeledCheckBoxHistGraph(BoxLayout):
     pass
