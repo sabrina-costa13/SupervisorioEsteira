@@ -109,6 +109,18 @@ class MainApp(App):
                 'tipo':'FP',
                 'div':1
             },
+            'es.torque':{
+                'addr':1420,
+                'tipo':'4X',
+                'div':100
+            },
+            'es.tipo_motor':{
+                'addr':708,
+                'tipo':'4X',
+                'div':1
+            } 
+        },
+        atuadores={
             'es.indica_driver':{
                 'addr':1216,
                 'tipo':'4X',
@@ -164,31 +176,6 @@ class MainApp(App):
                 'tipo':'4X',
                 'div':1
             },
-            'es.demanda_anterior':{
-                'addr':1204,
-                'tipo':'4X',
-                'div':1
-            },
-            'es.demanda_atual':{
-                'addr':1205,
-                'tipo':'4X',
-                'div':1
-            },
-            'es.demanda_media':{
-                'addr':1206,
-                'tipo':'4X',
-                'div':1
-            },
-            'es.demanda_pico':{
-                'addr':1207,
-                'tipo':'4X',
-                'div':1
-            },
-            'es.demanda_prevista':{
-                'addr':1208,
-                'tipo':'4X',
-                'div':1
-            },
             'es.habilita':{
                 'addr':1330,
                 'tipo':'4X',
@@ -218,11 +205,6 @@ class MainApp(App):
                 'addr':1310,
                 'tipo':'FP',
                 'div':1
-            },
-            'es.torque':{
-                'addr':1420,
-                'tipo':'4X',
-                'div':100
             }
         }
         )
