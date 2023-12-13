@@ -14,7 +14,7 @@ class DadosEsteira(Base):
     tensaoRS = Column(Integer)
     statusPID = Column(Integer)
     frequencia=Column(Integer)
-    corenter=Column(Integer)
+    correnter=Column(Integer)
     correntes=Column(Integer)
     correntet=Column(Integer)
     correnten=Column(Integer)
@@ -51,12 +51,11 @@ class DadosEsteira(Base):
         'es.ativa_r':self.potAtivar,
         'es.ativa_s':self.potAtivas,
         'es.ativa_t':self.potAtivat,
-        'es.ativa_total':self.potAtivatotal,
+        'es.ativa_total':self.potAtivaTotal,
         'es.fp_total':self.fatorPot,
         'es.encoder':self.rotmotor,
-        'es.carga':self.cargapid,
         'es.habilita':self.indicaPartida,
-        'es.torque':self.torque
+        'es.torque':self.torque,
         'es.tipo_motor':self.tipoMotor
         
         

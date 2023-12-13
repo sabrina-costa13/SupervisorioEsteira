@@ -45,7 +45,6 @@ class DataGraphPopup(Popup): #gráfico
 class HistGraphPopup(Popup):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        print(teste)
         for key,value in kwargs.get('tags').items():
             print(f'teste: {key}')
             cb = LabeledCheckBoxHistGraph()
