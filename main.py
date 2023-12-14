@@ -257,3 +257,11 @@ if __name__ == '__main__':
     Builder.load_string(open("mainwidget.kv",encoding="utf-8").read(),rulesonly=True)
     Builder.load_string(open("popups.kv",encoding="utf-8").read(),rulesonly=True)
     MainApp().run()
+    
+    
+"""
+    {'timestamp': datetime.datetime(2023, 12, 14, 9, 58, 59, 916366), 'values': 
+    {'es.status_pid': 1.0, 'es.temp_carc': 26.5, 'es.le_carga': 0.0, 'es.esteira': 0.0, 'es.frequencia': 60.03, 'es.corrente_r': 0.0, 'es.corrente_s': 0.0, 'es.corrente_t': 0.0, 'es.corrente_n': 0.0, 'es.corrente_media': 0.0, 'es.tensao_rs': 224.6, 'es.tensao_st': 224.1, 'es.tensao_tr': 226.1, 'es.ativa_r': 0.0, 'es.ativa_s': 0.0, 'es.ativa_t': 0.0, 'es.ativa_total': 0.0, 'es.fp_total': 32.768, 'es.encoder': 0.0, 'es.torque': 0.0, 'es.tipo_motor': 1.0, 'es.sel_pid': 1, 'es.mv_escreve': 0.0, 'es.carga': 0.0, 'es.p': 8.0, 'es.i': 5.0, 'es.d': 2.0, 'es.tesys': None, 'es.ats48': None, 'es.ats48_acc': None, 'es.ats48_dcc': None, 'es.atv31': 0, 'es.atv31_acc': 10.0, 'es.atv31_dcc': 10.0, 'es.atv31_velocidade': 60.0, 'es.sel_driver': 2}}
+
+    {'timestamp': datetime.datetime(2023, 12, 14, 9, 58, 59, 916366), 'values': 
+    {'es.status_pid': 1.0, 'es.temp_carc': 26.5, 'es.le_carga': 0.0, 'es.esteira': 0.0, 'es.frequencia': 60.03, 'es.corrente_r': 0.0, 'es.corrente_s': 0.0, 'es.corrente_t': 0.0, 'es.corrente_n': 0.0, 'es.corrente_media': 0.0, 'es.tensao_rs': 224.6, 'es.tensao_st': 224.1, 'es.tensao_tr': 226.1, 'es.ativa_r': 0.0, 'es.ativa_s': 0.0, 'es.ativa_t': 0.0, 'es.ativa_total': 0.0, 'es.fp_total': 32.768, 'es.encoder': 0.0, 'es.torque': 0.0, 'es.tipo_motor': 1.0, 'es.sel_pid': 1, 'es.mv_escreve': 0.0, 'es.carga': 0.0, 'es.p': 8.0, 'es.i': 5.0, 'es.d': 2.0, 'es.tesys': None, 'es.ats48': None, 'es.ats48_acc': None, 'es.ats48_dcc': None, 'es.atv31': 0, 'es.atv31_acc': 10.0, 'es.atv31_dcc': 10.0, 'es.atv31_velocidade': 60.0, 'es.sel_driver': 2}}"""

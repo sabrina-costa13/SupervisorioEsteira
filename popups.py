@@ -37,6 +37,8 @@ class ScanPopup(Popup):
         self.ids.txt_st.text = str(scantime)
 
 class DataGraphPopup(Popup): #gráfico 
+    
+    
     def __init__(self,xmax,plot_color, **kwargs):
         super().__init__(**kwargs)
         self.plot = LinePlot(line_width=1.5, color=plot_color)
@@ -92,7 +94,7 @@ class PidPopup(Popup):
         medida['values']['es.i']=self._I
         medida['values']['es.d']=self._D
     def setSetPoint(self):
-        self._SP= float(self.ids['es.carga'].text) 
+        self._SP= float(self.ids['es.carga'].text)
     def setMV(self):
         self._MV= float(self.ids['es.mv_escreve'].text)
     def setP(self):
@@ -106,8 +108,8 @@ class MotorPopup(Popup):
     """
     Popup para a configuração do motor
     """
-    _partida=None
-    _operacao=None
+    partida=None
+    operacao=None
     _velInversor=None
     _aceleracao=None
     _desaceleracao=None
@@ -116,8 +118,8 @@ class MotorPopup(Popup):
         Construtor da classe ComandoPopup
         """
         super().__init__(**kwargs)
-        self._partida= 'Inversor' #Partida padrão como inversor
-        self._operacao= 0 #Operação padrão como parado
+        self.partida= 'Inversor' #Partida padrão como inversor
+        self.operacao= 0 #Operação padrão como parado
         self._velInversor=float(self.ids["es.atv31_velocidade"].text)
         self._aceleracao=float(self.ids["es.atv31_acc"].text)
         self._desaceleracao=float(self.ids["es.atv31_dcc"].text)
@@ -133,29 +135,29 @@ class MotorPopup(Popup):
         medida['values']['es.atv31_dcc']= None
         medida['values']['es.atv31_velocidade']=None
 
-        if self._partida is not None:
-            if self._partida== 'Direta':
-                medida['values']['es.tesys']=self._operacao
+        if self.partida is not None:
+            if self.partida== 'Direta':
+                medida['values']['es.tesys']=self.operacao
                 medida['values']['es.sel_driver']=3
 
 
-            elif self._partida == 'Soft-Start':
-                medida['values']['es.ats48']=self._operacao
+            elif self.partida == 'Soft-Start':
+                medida['values']['es.ats48']=self.operacao
                 medida['values']['es.ats48_acc']=self._aceleracao
                 medida['values']['es.ats48_dcc']=self._desaceleracao
                 medida['values']['es.sel_driver']=1
 
-            elif self._partida == 'Inversor':
-                medida['values']['es.atv31']=self._operacao
+            elif self.partida == 'Inversor':
+                medida['values']['es.atv31']=self.operacao
                 medida['values']['es.atv31_acc']=self._aceleracao
                 medida['values']['es.atv31_dcc']=self._desaceleracao
                 medida['values']['es.atv31_velocidade']=self._velInversor
                 medida['values']['es.sel_driver']=2
                 
     def setPartida(self,partida):
-        self._partida=partida
+        self.partida=partida
     def setOperacao(self,operacao):
-        self._operacao=operacao
+        self.operacao=operacao
     def setAcc(self):
         self._aceleracao=float(self.ids["es.atv31_acc"].text)
     def setDcc(self):
@@ -179,15 +181,16 @@ class VarEltPopup(Popup):
         Método utilizado para atualizar os valores das medições
         """
         self.ids["es.corrente_media"].text = str(medida['values']['es.corrente_media'])
-        self.ids["es.ativa_total"].text = str(medida['values']['es.ativa_total'])
+        self.ids['es.ativa_total'].text = str(medida['values']['es.ativa_total'])
         self.ids["es.frequencia"].text = str(medida['values']['es.frequencia'])
         self.ids["es.fp_total"].text = str(medida['values']['es.fp_total'])
         self.ids["es.tensao_rs"].text = str(medida['values']['es.tensao_rs'])  
         self.ids["es.tensao_st"].text = str(medida['values']['es.tensao_st'])   
-        self.ids["es.tensao_tr"].text = str(medida['values']['es.tensao_tr']) 
+        self.ids["es.tensao_tr"].text = str(medida['values']['es.tensao_tr'])
+        self.ids["es.corrente_r"].text = str(medida['values']['es.corrente_r']) 
+        self.ids["es.corrente_s"].text = str(medida['values']['es.corrente_s'])
+        self.ids["es.corrente_t"].text = str(medida['values']['es.corrente_t'])
 
-
-            
 class LabeledCheckBoxHistGraph(BoxLayout):
     pass
 
@@ -197,3 +200,9 @@ class SelectDataGraphPopup(Popup):
         
 class LabeledCheckBoxDataGraph(BoxLayout):
     pass
+
+class db(Popup):
+    """
+    Construtor da classe dbPopup
+    """
+    pass 
